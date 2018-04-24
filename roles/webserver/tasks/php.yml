@@ -1,4 +1,23 @@
-- name: Install and configure the webserver
-  apt: name={{ item }} state=present
+- name: PHP | Add php-5.6 PPA
+  apt_repository: repo='ppa:ondrej/php'
+              state=present
+              update_cache=yes
+
+- name: PHP | install php packages
+  apt: pkg={{ item }} state=present
   with_items:
-    - php
+    - php5.6-fpm
+    - php5.6-cli
+    - php5.6-common
+    - php5.6-curl
+    - php5.6-json
+    - php5.6-gd
+    - php5.6-mcrypt
+    - php5.6-odbc
+    - php5.6-mbstring
+    - php5.6-mysql
+    - php5.6-xmlrpc
+    - php5.6-opcache
+    - php5.6-intl
+    - php5.6-bz2
+    - php5.6-xml

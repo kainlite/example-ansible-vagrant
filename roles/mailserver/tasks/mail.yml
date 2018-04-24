@@ -1,0 +1,24 @@
+- name: Mailserver | install all mailserver packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - postfix
+    - postfix-ldap
+    - postfix-pcre
+    - postgrey
+    - amavisd-new
+    - clamav
+    - clamdscan
+    - sasl2-bin
+    - libsasl2-2
+    - php-auth-sasl
+    - dovecot-core
+    - dovecot-imapd
+    - dovecot-ldap
+    - dovecot-lmtpd
+    - dovecot-managesieved
+    - dovecot-mysql
+    - dovecot-pop3d
+    - dovecot-sieve
+    - opendkim
+    - libopendkim10
+    - spamassassin

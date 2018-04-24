@@ -1,0 +1,19 @@
+---
+hostname: example.hostname.com
+
+document_root: /vagrant
+mysql_root_home: /root
+mysql_root_username: 'root'
+mysql_root_password: 'root'
+
+db:
+  user: example
+  password: "example"
+  name: example
+
+
+mysql_users:
+  - name: "{{ db.user }}"
+    host: "%"
+    password: "{{ db.password }}"
+    priv: "{{ db.name }}.*:ALL"

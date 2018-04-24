@@ -1,9 +1,10 @@
 ---
 - hosts: all
   become: true
-  vars:
-    document_root: /vagrant
+  vars_files:
+    - vars.yml
   roles:
+    - hostname
     - webserver
     - mailserver
     - database
@@ -11,3 +12,6 @@
   pre_tasks:
     - name: update apt cache
       apt: update_cache=yes
+    - name: set fqdn
+      hostname:
+        name: "{{ hostname }}"
