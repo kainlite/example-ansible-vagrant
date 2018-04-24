@@ -1,12 +1,12 @@
-- name: Webmail | install webmail client packages
+- name: Webmail & Ldap admin | install webmail client packages
   apt: pkg={{ item }} state=present
   with_items:
+    - phpldapadmin
     - php-ldap
     - php-net-ldap
     - php-net-ldap2
     - php-net-ldap3
     - php5.6-ldap
-    - phpldapadmin
     - roundcube
     - roundcube-core
     - roundcube-mysql
