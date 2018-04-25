@@ -1,7 +1,15 @@
 ---
-hostname: example.hostname.com
+hostname: example.com
+mail_hostname: mail.example.com
 
-document_root: /vagrant
+ldap_organization: organization
+ldap_users_ou: users
+ldap_admin: admin
+ldap_admin_password: example
+ldap_proxy: proxy
+ldap_proxy_password: example
+
+document_root: /var/www/html
 mysql_root_home: /root
 mysql_root_username: 'root'
 mysql_root_password: 'root'
@@ -10,7 +18,6 @@ db:
   user: example
   password: "example"
   name: example
-
 
 mysql_users:
   - name: "{{ db.user }}"

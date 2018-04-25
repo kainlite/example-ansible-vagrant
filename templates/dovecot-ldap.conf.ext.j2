@@ -1,0 +1,16 @@
+hosts           = localhost:389
+ldap_version    = 3
+auth_bind       = yes
+dn              = cn={{ ldap_proxy }},dc={{ ldap_organization }}
+dnpass          = {{ ldap_proxy_password }}
+base            = dc={{ ldap_organization }}
+scope           = subtree
+deref           = never
+
+user_attrs = \
+  =uid=vmail, \
+  =gid=vmail
+user_filter = (&(objectClass=CourierMailAccount)(mail=%u))
+pass_attrs = mail,userPassword
+pass_filter = (&(objectClass=CourierMailAccount)(mail=%u))
+default_pass_scheme = MD5

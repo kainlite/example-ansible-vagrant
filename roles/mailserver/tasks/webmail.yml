@@ -12,3 +12,16 @@
     - roundcube-mysql
     - roundcube-plugins
     - roundcube-plugins-extra
+
+- name: Add roundcube conf
+  file:
+    src=/etc/apache2/conf-available/roundcube.conf
+    dest=/etc/apache2/conf-enabled/roundcube.conf
+    state=link
+
+- name: Enable roundcube alias
+  lineinfile:
+    dest: /etc/apache2/conf-enabled/roundcube.conf
+    regexp: '#    Alias /roundcube /var/lib/roundcube'
+    line: 'Alias /roundcube /var/lib/roundcube'
+    state: present

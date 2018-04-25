@@ -1,0 +1,30 @@
+---
+- name: Copy dovecot-ldap.conf.ext file
+  template:
+    src: templates/dovecot-ldap.conf.ext.j2
+    dest: "/etc/dovecot/dovecot-ldap.conf.ext"
+
+- name: Copy 10-auth.conf file
+  template:
+    src: templates/10-auth.conf.j2
+    dest: "/etc/dovecot/conf.d/10-auth.conf"
+
+- name: Copy 10-master.conf file
+  template:
+    src: templates/10-master.conf.j2
+    dest: "/etc/dovecot/conf.d/10-master.conf"
+
+- name: Copy 10-mail.conf file
+  template:
+    src: templates/10-mail.conf.j2
+    dest: "/etc/dovecot/conf.d/10-mail.conf"
+
+- name: Copy 90-sieve.conf file
+  template:
+    src: templates/90-sieve.conf.j2
+    dest: "/etc/dovecot/conf.d/90-sieve.conf"
+
+- name: Make sure dovecot is running
+  service:
+    name: dovecot
+    state: started

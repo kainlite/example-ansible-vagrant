@@ -1,0 +1,129 @@
+smtpd_banner = $myhostname ESMTP $mail_name ({{ mail_hostname }})
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+delay_warning_time = 4h
+
+readme_directory = /usr/share/doc/postfix
+
+# TLS parameters
+smtpd_tls_cert_file = /etc/postfix/ssl/smtpd.crt
+smtpd_tls_key_file = /etc/postfix/ssl/smtpd.key
+smtpd_use_tls = no
+smtpd_tls_session_cache_database = btree:${queue_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${queue_directory}/smtp_scache
+
+# See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
+# information on enabling SSL in the smtp client.
+myhostname = {{ mail_hostname }}
+
+# Aliases
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+myorigin = /etc/mailname
+
+# allowed hosts
+mydestination = localhost.localdomain, localhost, $transport_maps, $myhostname
+
+# relay conf
+relayhost =
+relay_domains = $mydestination, /etc/postfix/mxbackup
+mynetworks = 127.0.0.0/8 10.55.0.0/24
+
+# default limits
+mailbox_size_limit = 0
+recipient_delimiter = +
+maximal_queue_lifetime = 5d
+
+# max attachment size 32Mb
+message_size_limit = 32768000
+
+# concurrent mails to a destination
+default_destination_concurrency_limit = 10
+
+# max recipients
+smtpd_recipient_limit = 30
+
+inet_interfaces = all
+html_directory = /usr/share/doc/postfix/html
+
+# DKIM, DomainKeys
+milter_default_action = accept
+milter_protocol = 2
+smtpd_milters = inet:localhost:8891
+non_smtpd_milters = $smtpd_milters
+
+header_checks = pcre:/etc/postfix/amavis_header_checks
+smtp_mime_header_checks = pcre:/etc/postfix/mime_amavis_header_checks
+
+virtual_transport = dovecot
+home_mailbox = Maildir/
+mailbox_command = /usr/lib/dovecot/dovecot-lda -f "$SENDER" -a "$RECIPIENT"
+dovecot_destination_recipient_limit = 1
+
+#virtual_alias_maps = hash:/etc/postfix/virtual ldap:valiases
+virtual_alias_maps = ldap:valiases
+#virtual_mailbox_domains = ldap:domains
+virtual_mailbox_domains = hash:/etc/postfix/virtual
+virtual_mailbox_base = /
+virtual_mailbox_maps = ldap:vuser
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+
+# Amavis
+content_filter=smtp-amavis:[localhost]:10024
+
+# SASL SMTP AUTH
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+
+smtpd_sasl_auth_enable = yes
+broken_sasl_auth_clients = yes
+smtp_sasl_security_options = noanonymous
+smtpd_sasl_security_options = noanonymous
+# smtpd_sasl_path = /var/spool/postfix/var/run/saslauthd
+smtpd_sasl_local_domain = $myhostname
+# smtpd_sasl_tls_security_options = noanonymous
+# smtpd_sasl_application_name = smtpd
+
+# validations/restrictions
+smtpd_recipient_restrictions = permit_mynetworks
+                               reject_non_fqdn_recipient
+                               reject_non_fqdn_sender
+                               reject_unknown_recipient_domain
+                               permit_sasl_authenticated
+                               check_policy_service inet:127.0.0.1:10023
+                               reject_unauth_destination
+
+smtpd_sender_restrictions = reject_non_fqdn_sender
+
+# address_verify_negative_expire_time = 10d
+# show_user_unknown_table_name = no
+
+ldap_host = 127.0.0.1
+ldap_base_dn = ou={{ ldap_users_ou }},dc={{ ldap_organization }}
+ldap_user_dn = cn={{ ldap_admin }},dc={{ ldap_organization }}
+ldap_user_pw = {{ ldap_admin_password }}
+
+# Virtual ALIAS
+valiases_server_host = $ldap_host
+valiases_search_base = ou={{ ldap_users_ou }},dc={{ ldap_organization }}
+valiases_query_filter = (&(mail=%s)(objectClass=CourierMailAlias))
+valiases_result_attribute = maildrop
+valiases_bind = yes
+valiases_bind_dn = $ldap_user_dn
+valiases_bind_pw = $ldap_user_pw
+
+# Virtual User
+vuser_server_host = $ldap_host
+vuser_search_base = $ldap_base_dn
+vuser_query_filter = (&(mail=%s)(!(quota=-1))(objectClass=CourierMailAccount))
+vuser_result_attribute = mailbox
+vuser_scope = sub
+vuser_bind = yes
+vuser_bind_dn = $ldap_user_dn
+vuser_bind_pw = $ldap_user_pw

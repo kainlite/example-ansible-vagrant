@@ -20,5 +20,11 @@
     - dovecot-pop3d
     - dovecot-sieve
     - opendkim
+    - opendkim-tools
     - libopendkim10
     - spamassassin
+
+- import_tasks: opendkim.yml
+- import_tasks: amavis.yml
+- import_tasks: dovecot.yml
+- import_tasks: postfix.yml

@@ -1,0 +1,45 @@
+- name: Creates the opendkim hostname folder
+  file: path=/etc/opendkim/{{ hostname }} state=directory owner=opendkim group=opendkim
+
+- name: Generate key for opendkim
+  command: opendkim-genkey -s mail -d {{ mail_hostname }} -D /etc/opendkim/{{ hostname }} creates=/etc/opendkim/{{ hostname }}/mail.private
+
+- name: Fix permissions for mail.private
+  file: path=/etc/opendkim/{{ hostname }}/mail.private owner=opendkim group=opendkim
+
+- name: Fix permissions for mail.txt
+  file: path=/etc/opendkim/{{ hostname }}/mail.txt owner=opendkim group=opendkim
+
+- name: Copy default listener config
+  template:
+    src: templates/default_opendkim.j2
+    dest: "/etc/default/opendkim"
+
+- name: Copy KeyTable file
+  template:
+    src: templates/KeyTable.j2
+    dest: "/etc/opendkim/KeyTable"
+    owner: opendkim
+    group: opendkim
+    mode: 0755
+
+- name: Copy SigningTable
+  template:
+    src: templates/SigningTable.j2
+    dest: "/etc/opendkim/SigningTable"
+    owner: opendkim
+    group: opendkim
+    mode: 0755
+
+- name: Copy TrustedHosts
+  template:
+    src: templates/TrustedHosts.j2
+    dest: "/etc/opendkim/TrustedHosts"
+    owner: opendkim
+    group: opendkim
+    mode: 0755
+
+- name: Make sure opendkim is running
+  service:
+    name: opendkim
+    state: started

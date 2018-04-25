@@ -1,0 +1,10 @@
+---
+- name: Copy amavis 15-content_filter_mode file
+  template:
+    src: templates/15-content_filter_mode.j2
+    dest: "/etc/amavis/conf.d/15-content_filter_mode"
+
+- name: Make sure amavis is running
+  service:
+    name: amavis
+    state: started

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Vars
+SENDMAIL="/usr/sbin/sendmail -i"
+EGREP=/bin/egrep
+TMPFILE=/tmp/spamchk.$$
+SIDELINE_DIR=/var/spamchk
+
+# Min score
+SPAMLIMIT=5
+# cleanup
+trap "rm -f $TMPFILE" 0 1 2 3 15
+# save the file in $TMPFILE
+cat | /usr/bin/spamc -u spamfilter | sed 's/^.$/../' > $TMPFILE
+# # if it is spam
+# if $EGREP -q "^X-Spam-Level: *{$SPAMLIMIT,}" < $TMPFILE
+# then
+#   # save to the hdd
+#   # mv $TMPFILE $SIDELINE_DIR/`date +%Y-%m-%d_%R`-$$
+#   # or send it to a spam folder/dir
+#   # $SENDMAIL spam@xxxx.xx < $TMPFILE
+#   # or delete the message
+#   # rm -f $TMPFILE
+# else
+$SENDMAIL "$@" < $TMPFILE
+# fi
+exit $?

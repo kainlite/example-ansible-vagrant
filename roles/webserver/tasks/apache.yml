@@ -21,5 +21,20 @@
     dest=/etc/apache2/sites-enabled/vagrant.conf
     state=link
 
+- name: Copy default index.php template to destination
+  template:
+    src=index.php.j2
+    dest=/var/www/html/index.php
+
+- name: Delete default index.html
+  file:
+    state: absent
+    path: /var/www/html/index.html
+
 - name: Reload apache
   service: name=apache2 state=reloaded
+
+- name: make sure apache is running
+  service:
+    name: apache2
+    state: started

@@ -1,0 +1,47 @@
+---
+- name: Copy postfix main.cf file
+  template:
+    src: templates/main.cf.j2
+    dest: "/etc/postfix/main.cf"
+
+- name: Copy postfix master.cf file
+  template:
+    src: templates/master.cf.j2
+    dest: "/etc/postfix/master.cf"
+
+- name: Copy postfix virtual file
+  template:
+    src: templates/virtual.j2
+    dest: "/etc/postfix/virtual"
+
+- name: Copy postfix mxbackup file
+  template:
+    src: templates/mxbackup.j2
+    dest: "/etc/postfix/mxbackup"
+
+- name: Copy amavis_header_checks mxbackup file
+  template:
+    src: templates/amavis_header_checks.j2
+    dest: "/etc/postfix/amavis_header_checks"
+
+- name: Copy mailname file
+  template:
+    src: templates/mailname.j2
+    dest: "/etc/mailname"
+
+- name: Hash the virtual alias file
+  command: postmap /etc/postfix/virtual
+
+- name: Hash the mxbackup file
+  command: postmap /etc/postfix/mxbackup
+
+- name: Copy spamfilter.sh file
+  template:
+    src: templates/spamfilter.sh.j2
+    dest: "/usr/local/bin/spamfilter.sh"
+    mode: 0775
+
+- name: Make sure postfix is running
+  service:
+    name: postfix
+    state: started
