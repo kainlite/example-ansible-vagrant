@@ -1,9 +1,10 @@
 - name: Ldap | install all ldap related packages
   apt: pkg={{ item }} state=present
   with_items:
+    - slapd
+    - ldap-utils
     - postfix-ldap
     - dovecot-ldap
-    - ldap-utils
     - libnet-ldap-perl
     - postfix-ldap
     - phpldapadmin

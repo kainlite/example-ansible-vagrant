@@ -1,7 +1,6 @@
 - name: Webmail & Ldap admin | install webmail client packages
   apt: pkg={{ item }} state=present
   with_items:
-    - phpldapadmin
     - php-ldap
     - php-net-ldap
     - php-net-ldap2
@@ -12,8 +11,26 @@
     - roundcube-mysql
     - roundcube-plugins
     - roundcube-plugins-extra
+    - dbconfig-common
+    - dbconfig-mysql
 
-- name: Add roundcube conf
+- name: Add roundcube dbconfig file
+  template:
+    src: templates/roundcube.conf.j2
+    dest: "/etc/dbconfig-common/roundcube.conf"
+
+- name: Set roundcube vars
+  command: "{{ item }}"
+  with_items:
+    - '/usr/share/debconf/fix_db.pl'
+    - 'echo "dbconfig-common dbconfig-common/mysql/admin-pass password {{ mysql_root_password }}" | debconf-set-selections'
+    - 'echo "roundcube-core roundcube/language select en_US"             | debconf-set-selections'
+    - 'echo "roundcube-core roundcube/database-type select mysql"        | debconf-set-selections'
+    - 'echo "roundcube-core roundcube/mysql/admin-pass password {{ mysql_root_password }}" | debconf-set-selections'
+    - 'echo "roundcube-core roundcube/dbconfig-install boolean true"     | debconf-set-selections'
+    - 'dpkg-reconfigure roundcube-core -fnoninteractive'
+
+- name: Add roundcube apache conf
   file:
     src=/etc/apache2/conf-available/roundcube.conf
     dest=/etc/apache2/conf-enabled/roundcube.conf
@@ -25,3 +42,8 @@
     regexp: '#    Alias /roundcube /var/lib/roundcube'
     line: 'Alias /roundcube /var/lib/roundcube'
     state: present
+
+- name: Add roundcube config.inc.php
+  template:
+    src: templates/config.inc.php.j2
+    dest: "/etc/roundcube/config.inc.php"
