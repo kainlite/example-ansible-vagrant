@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>2</askcontainer>
+<description>New email alias</description>
+<icon>mail_alias.png</icon>
+<invalid>0</invalid>
+<rdn>cn</rdn>
+<!--<regexp>^ou=People,o=.*,</regexp>-->
+<title>02 - Mail Alias</title>
+<visible>1</visible>
+
+<objectClasses>
+<objectClass id="inetOrgPerson"></objectClass>
+<objectClass id="courierMailAlias"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="cn">
+        <display>Name (without @domain)</display>
+        <onchange>=autoFill(sn;%cn%)</onchange>
+        <onchange>=autoFill(mail;%cn%@ineltur.com)</onchange>
+        <order>1</order>
+        <page>1</page>
+</attribute>
+<attribute id="sn">
+        <display>Description</display>
+        <order>2</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="mail">
+        <display>Email alias</display>
+        <order>3</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="maildrop">
+        <display>Email destiny</display>
+        <order>4</order>
+        <page>1</page>
+</attribute>
+</attributes>
+
+</template>
+

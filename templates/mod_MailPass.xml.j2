@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>1</askcontainer>
+<description>Modify Courier Mail Password</description>
+<icon>mail_account.png</icon>
+<invalid>0</invalid>
+<rdn>cn</rdn>
+<!--<regexp>^ou=People,o=.*,</regexp>-->
+<title>01 - Modify Courier mail password</title>
+<visible>1</visible>
+
+<objectClasses>
+<objectClass id="top"></objectClass>
+<objectClass id="inetOrgPerson"></objectClass>
+<objectClass id="courierMailAccount"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="cn">
+        <display>Common Name</display>
+        <icon>ldap-uid.png</icon>
+        <order>1</order>
+        <page>1</page>
+        <spacer>1</spacer>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="givenName">
+        <display>Given Name</display>
+        <order>2</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="sn">
+        <display>Last name</display>
+        <order>3</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="uid">
+        <display>User ID</display>
+        <order>4</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="uidNumber">
+        <display>UID Number</display>
+        <icon>terminal.png</icon>
+        <order>6</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="gidNumber">
+        <display>GID Number</display>
+        <order>7</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="homeDirectory">
+        <display>Home Directory</display>
+        <order>8</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="mail">
+        <display>Email</display>
+        <icon>mail.png</icon>
+        <order>9</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="mailbox">
+        <display>Mailbox</display>
+        <order>10</order>
+        <page>1</page>
+        <readonly>1</readonly>
+</attribute>
+<attribute id="userPassword">
+        <display>Password</display>
+        <icon>lock.png</icon>
+        <type>password</type>
+        <verify>1</verify>
+        <order>11</order>
+        <post>=php.PasswordEncrypt(%enc%;%userPassword%)</post>
+        <page>1</page>
+</attribute>
+</attributes>
+
+</template>

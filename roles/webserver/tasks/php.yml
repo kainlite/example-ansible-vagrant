@@ -6,6 +6,7 @@
 - name: PHP | install php packages
   apt: pkg={{ item }} state=present
   with_items:
+    - php5.6
     - php5.6-fpm
     - php5.6-cli
     - php5.6-common
@@ -21,3 +22,9 @@
     - php5.6-intl
     - php5.6-bz2
     - php5.6-xml
+    - libapache2-mod-php5.6
+
+- apache2_module:
+    state: present
+    name: php5.6
+    force: true

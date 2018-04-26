@@ -7,3 +7,48 @@
     - libnet-ldap-perl
     - postfix-ldap
     - phpldapadmin
+
+- name: Phpldapadmin config
+  template:
+    src: templates/phpldapadmin_config.php.j2
+    dest: "/etc/phpldapadmin/config.php"
+
+- name: FTPAccount template
+  template:
+    src: templates/FTPAccount.xml.j2
+    dest: "/etc/phpldapadmin/templates/creation/FTPAccount.xml"
+
+- name: MailAccount template
+  template:
+    src: templates/MailAccount.xml.j2
+    dest: "/etc/phpldapadmin/templates/creation/MailAccount.xml"
+
+- name: MailAlias template
+  template:
+    src: templates/MailAlias.xml.j2
+    dest: "/etc/phpldapadmin/templates/creation/MailAlias.xml"
+
+- name: OU template
+  template:
+    src: templates/OU.xml.j2
+    dest: "/etc/phpldapadmin/templates/creation/OU.xml"
+
+- name: PosixGroup template
+  template:
+    src: templates/PosixGroup.xml.j2
+    dest: "/etc/phpldapadmin/templates/creation/PosixGroup.xml.j2"
+
+- name: inetOrgPerson template
+  template:
+    src: templates/mod_inetOrgPerson.xml.j2
+    dest: "/etc/phpldapadmin/templates/modification/inetOrgPerson.xml"
+
+- name: MailPass template
+  template:
+    src: templates/mod_MailPass.xml.j2
+    dest: "/etc/phpldapadmin/templates/modification/MailPass.xml"
+
+- name: posixGroup template
+  template:
+    src: templates/mod_posixGroup.xml.j2
+    dest: "/etc/phpldapadmin/templates/modification/posixGroup.xml"
