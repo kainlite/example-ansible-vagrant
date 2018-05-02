@@ -1,3 +1,115 @@
+- name: roundcube language
+  debconf:
+    name: roundcube-core
+    question: roundcube/language
+    value: "en_US"
+    vtype: select
+
+- name: roundcube database-type
+  debconf:
+    name: roundcube-core
+    question: roundcube/database-type
+    value: "mysql"
+    vtype: select
+
+- name: roundcube mysql admin pass
+  debconf:
+    name: roundcube-core
+    question: roundcube/mysql/admin-pass
+    value: "{{ db.password }}"
+    vtype: password
+
+- name: roundcube app-user
+  debconf:
+    name: roundcube-core
+    question: roundcube/db/app-user
+    value: "{{ db.user }}"
+    vtype: string
+
+- name: roundcube dbconfig
+  debconf:
+    name: roundcube-core
+    question: roundcube/dbconfig-install
+    value: "true"
+    vtype: boolean
+
+- name: roundcube dbconfig-reinstall
+  debconf:
+    name: roundcube-core
+    question: roundcube/dbconfig-reinstall
+    value: "true"
+    vtype: boolean
+
+- name: roundcube mysql user
+  debconf:
+    name: roundcube-core
+    question: roundcube/mysql/admin-user
+    value: "{{ db.user }}"
+    vtype: string
+
+- name: roundcube restart webserver
+  debconf:
+    name: roundcube-core
+    question: roundcube/restart-webserver
+    value: "true"
+    vtype: boolean
+
+- name: roundcube dbname
+  debconf:
+    name: roundcube-core
+    question: roundcube/db/dbname
+    value: "roundcube"
+    vtype: string
+
+- name: roundcube imap host
+  debconf:
+    name: roundcube-core
+    question: roundcube/hosts
+    value: "localhost:143"
+    vtype: string
+
+- name: roundcube host
+  debconf:
+    name: roundcube-core
+    question: roundcube/remote/host
+    value: "localhost"
+    vtype: string
+
+- name: roundcube mysql connection method
+  debconf:
+    name: roundcube-core
+    question: roundcube/mysql/method
+    value: "TCP/IP"
+    vtype: select
+
+- name: roundcube mysql port
+  debconf:
+    name: roundcube-core
+    question: roundcube/remote/port
+    value: "3306"
+    vtype: string
+
+- name: roundcube reconfigure webserver
+  debconf:
+    name: roundcube-core
+    question: roundcube/reconfigure-webserver
+    value: "apache2"
+    vtype: multiselect
+
+- name: roundcube dbconfig-upgrade
+  debconf:
+    name: roundcube-core
+    question: roundcube/dbconfig-upgrade
+    value: "true"
+    vtype: boolean
+
+- name: roundcube upgrade backup
+  debconf:
+    name: roundcube-core
+    question: roundcube/upgrade-backup
+    value: "true"
+    vtype: boolean
+
 - name: Webmail & Ldap admin | install webmail client packages
   apt: pkg={{ item }} state=present
   with_items:
@@ -18,17 +130,6 @@
   template:
     src: templates/roundcube.conf.j2
     dest: "/etc/dbconfig-common/roundcube.conf"
-
-- name: Set roundcube vars
-  command: "{{ item }}"
-  with_items:
-    - '/usr/share/debconf/fix_db.pl'
-    - 'echo "dbconfig-common dbconfig-common/mysql/admin-pass password {{ mysql_root_password }}" | debconf-set-selections'
-    - 'echo "roundcube-core roundcube/language select en_US"             | debconf-set-selections'
-    - 'echo "roundcube-core roundcube/database-type select mysql"        | debconf-set-selections'
-    - 'echo "roundcube-core roundcube/mysql/admin-pass password {{ mysql_root_password }}" | debconf-set-selections'
-    - 'echo "roundcube-core roundcube/dbconfig-install boolean true"     | debconf-set-selections'
-    - 'dpkg-reconfigure roundcube-core -fnoninteractive'
 
 - name: Add roundcube apache conf
   file:

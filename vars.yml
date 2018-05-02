@@ -15,9 +15,9 @@ mysql_root_username: 'root'
 mysql_root_password: 'root'
 
 db:
-  user: example
-  password: "example"
-  name: example
+  user: roundcube
+  password: "roundcube"
+  name: roundcube
 
 mysql_users:
   - name: "{{ db.user }}"

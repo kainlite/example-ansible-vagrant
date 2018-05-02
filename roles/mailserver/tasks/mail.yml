@@ -24,6 +24,15 @@
     - libopendkim10
     - spamassassin
 
+- name: Create vmail user
+  user:
+    name: vmail
+    groups: ""
+    state: present
+    shell: /bin/true
+    system: yes
+    createhome: no
+
 - import_tasks: opendkim.yml
 - import_tasks: amavis.yml
 - import_tasks: dovecot.yml

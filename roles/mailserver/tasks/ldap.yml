@@ -1,3 +1,94 @@
+- name: slapd password2
+  debconf:
+    name: slapd
+    question: slapd/password2
+    value: "{{ ldap_admin_password }}"
+    vtype: password
+
+- name: slapd password1
+  debconf:
+    name: slapd
+    question: slapd/password1
+    value: "{{ ldap_admin_password }}"
+    vtype: password
+
+- name: slapd adminpw
+  debconf:
+    name: slapd
+    question: slapd/internal/adminpw
+    value: "{{ ldap_admin_password }}"
+    vtype: password
+
+- name: slapd generated_adminpw
+  debconf:
+    name: slapd
+    question: slapd/internal/generated_adminpw
+    value: "{{ ldap_admin_password }}"
+    vtype: password
+
+- name: slapd dump_database
+  debconf:
+    name: slapd
+    question: slapd/dump_database
+    value: 'true'
+    vtype: boolean
+
+- name: slapd dump_database_destdir
+  debconf:
+    name: slapd
+    question: slapd/dump_database_destdir
+    value: '/var/backups/slapd-VERSION'
+    vtype: string
+
+- name: slapd
+  debconf:
+    name: slapd
+    question: slapd/no_configuration
+    value: 'false'
+    vtype: boolean
+
+- name: slapd organization
+  debconf:
+    name: slapd
+    question: slapd/domain
+    value: "{{ ldap_organization }}"
+    vtype: string
+
+- name: slapd db type
+  debconf:
+    name: slapd
+    question: slapd/backend
+    value: 'MDB'
+    vtype: select
+
+- name: slapd move old database
+  debconf:
+    name: slapd
+    question: slapd/move_old_database
+    value: 'true'
+    vtype: boolean
+
+- name: slapd allow_ldap_v2
+  debconf:
+    name: slapd
+    question: slapd/allow_ldap_v2
+    value: 'true'
+    vtype: boolean
+
+- name: slapd purge_database
+  debconf:
+    name: slapd
+    question: slapd/purge_database
+    value: 'true'
+    vtype: boolean
+
+- name: slapd organization
+  debconf:
+    name: slapd
+    question: shared/organization
+    value: "{{ ldap_organization }}"
+    vtype: string
+
 - name: Ldap | install all ldap related packages
   apt: pkg={{ item }} state=present
   with_items:
